@@ -1,134 +1,33 @@
-# 🎬 Chroma Cinema
+# Chroma-Cinema
 
-> **A Research Project on Color Psychology, Cinematic Color Grading, Visual Storytelling, and AI-Assisted Color Correction in Modern Filmmaking**
+Do movie genres have a color signature? This project pulls movie posters from
+TMDB, extracts each poster's dominant colors with OpenCV + K-Means, and
+aggregates the palettes by genre — e.g. does horror skew dark/red, does
+comedy skew bright/saturated, does sci-fi skew blue?
 
----
+## Setup
 
-## 📖 Overview
-
-**Chroma Cinema** is an academic research project that investigates the role of color in filmmaking and its impact on storytelling, audience perception, and emotional engagement. The study explores how filmmakers use color theory, color psychology, and color grading to create meaningful visual narratives while examining the emergence of Artificial Intelligence in modern post-production workflows.
-
----
-
-## 📝 Abstract
-
-Color is one of the most influential visual elements in cinema. It shapes emotions, establishes atmosphere, enhances storytelling, and influences audience interpretation. This research examines the principles of color psychology, traditional cinematic color grading techniques, and recent advancements in AI-assisted color correction.
-
-The study reviews existing literature, industry practices, and technological developments to understand how color contributes to cinematic expression and how artificial intelligence is transforming the future of film post-production.
-
----
-
-## 🎯 Research Objectives
-
-* Study the fundamentals of color theory in filmmaking.
-* Understand the psychological effects of colors on audiences.
-* Analyze the importance of color grading in cinematic storytelling.
-* Explore AI-assisted color correction and grading technologies.
-* Compare traditional and AI-based color grading workflows.
-* Identify future trends in intelligent filmmaking.
-
----
-
-## ❓ Research Questions
-
-* How does color influence audience emotions and perception?
-* What role does color grading play in visual storytelling?
-* How is Artificial Intelligence changing modern film post-production?
-* What are the advantages and limitations of AI-assisted color grading?
-* Can AI enhance creative workflows while preserving artistic intent?
-
----
-
-## 📚 Scope of the Research
-
-This research focuses on:
-
-* Color Psychology in Cinema
-* Color Theory
-* Cinematography
-* Visual Storytelling
-* Color Grading Techniques
-* Digital Post-Production
-* AI-Assisted Color Correction
-* Future Applications of Artificial Intelligence in Filmmaking
-
----
-
-## 🔬 Research Methodology
-
-The study follows a qualitative research approach involving:
-
-* Literature Review
-* Analysis of academic journals and research papers
-* Study of cinematic case examples
-* Comparative analysis of traditional and AI-assisted color grading methods
-* Review of current industry practices and emerging technologies
-
----
-
-## 🎓 Expected Outcomes
-
-The research aims to:
-
-* Explain the relationship between color and audience perception.
-* Highlight the significance of color grading in storytelling.
-* Evaluate the impact of AI on cinematic post-production.
-* Provide insights into future developments in intelligent filmmaking technologies.
-
----
-
-## 📂 Repository Structure
-
-```text
-Chroma-Cinema/
-│
-├── README.md
-├── Abstract/
-├── Literature_Review/
-├── Research_Paper/
-├── Presentation/
-├── References/
-├── Images/
-└── Documentation/
+```bash
+pip install requests opencv-python-headless scikit-learn matplotlib numpy --break-system-packages
+export TMDB_API_KEY="your_key_here"   # free key: https://www.themoviedb.org/settings/api
+python chroma_cinema.py
 ```
 
----
+## Output
 
-## 🔑 Keywords
+- `posters/` — downloaded poster images
+- `palettes.csv` — per-movie dominant RGB + genre
+- `genre_palette.png` — bar chart of the average dominant color per genre
 
-* Color Psychology
-* Color Theory
-* Cinema
-* Cinematography
-* Visual Storytelling
-* Color Grading
-* Artificial Intelligence
-* Film Editing
-* Digital Post-Production
-* Machine Learning
+## How it works
 
----
+1. **Fetch** — TMDB `/discover/movie` pulls top-rated movies per genre (8 genres, 20 movies each by default — bump `MOVIES_PER_GENRE` for more signal).
+2. **Extract** — each poster is resized and clustered with K-Means (k=5) in RGB space to find its dominant colors.
+3. **Aggregate** — dominant colors are averaged within each genre and plotted.
 
-## 🚀 Future Scope
+## Ideas to extend
 
-Future research may include:
-
-* AI-powered real-time color grading
-* Deep learning for cinematic color enhancement
-* Intelligent visual storytelling systems
-* AI-assisted film restoration
-* Virtual production workflows
-* Personalized color recommendation systems
-* Generative AI in post-production
-
----
-
-## 📚 References
-
-This research is based on scholarly articles, books on color theory, cinematography resources, film studies literature, and publications related to Artificial Intelligence in digital filmmaking.
-
----
-
-## 📄 License
-
-This repository is intended solely for **academic and educational research purposes**.
+- Swap RGB clustering for HSV to separate hue from brightness/saturation.
+- Correlate palette "darkness" with genre and see if it predicts rating or box office.
+- Build a tiny classifier: given just a poster's palette, predict genre.
+- Turn `genre_palette.png` into an interactive Plotly chart for the GitHub README.
